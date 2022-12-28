@@ -1,12 +1,15 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid my-5">
     <div class="row justify-content-center text-center">
       <div class="col-lg-5 col-md-7 col-10">
-        <div class="content my-5 mx-2 py-5 px-5">
+        <general-error
+          :showGeneralError="showGeneralError"
+          :generalError="generalError"
+        />
+        <div class="content mt-2 mx-2 py-5 px-5">
           <i class="fa-regular fa-user icon"></i>
           <h2 class="my-3">Sign In</h2>
           <form action="/action_page.php">
-            <input type="hidden" value="asd" />
             <div class="mb-3">
               <input
                 type="text"
@@ -50,16 +53,31 @@
               </p>
             </div>
 
-            <button
-              @click.prevent="login()"
-              type="submit"
-              class="btn btn-primary x-button"
-            >
-              Sign In
-            </button>
+            <login-button
+              url="http://127.0.0.1:8000/api/user/login"
+              :dataSend="{
+                username: username,
+                password: password,
+              }"
+              :errorsMessages="errorsMessages"
+              routeName="index"
+              source="user"
+              @showGeneralError="
+                (value) => {
+                  showGeneralError = value;
+                }
+              "
+              @generalError="
+                (value) => {
+                  generalError = value;
+                }
+              "
+            />
+
             <div class="mt-3">
-              <span>Don't Have Acount?</span>
-              <nuxt-link :to="{ name: 'register' }">Sign Up</nuxt-link>
+              <nuxt-link class="text-dark" :to="{ name: 'user-register' }">Create Account</nuxt-link>
+              <span>|</span>
+              <nuxt-link class="text-dark" :to="{ name: 'user-forgetPassword' }">Forget Password</nuxt-link>
             </div>
           </form>
         </div>
@@ -69,13 +87,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import { mapMutations } from "vuex";
 export default {
-
-  layout: "default",
+  middleware: "guest",
   data() {
     return {
+      showGeneralError: false,
+      generalError: false,
       username: "",
       password: "",
       errorsMessages: {
@@ -84,29 +101,6 @@ export default {
       },
     };
   },
-  methods: {
-    ...mapMutations({
-      setToken: "auth/setToken",
-      setUser: "auth/setUser",
-    }),
-    async login() {
-      let result = await axios.post("http://127.0.0.1:8000/api/user/login", {
-        username: this.username,
-        password: this.password,
-      });
-      console.log(result.data);
-      if (result.data.code == 200) {
-        this.setToken(result.data.token);
-        this.setUser(result.data.user);
-        return this.$router.push({ name: "index" });
-      } else {
-        let messages = result.data.message;
-        for (let item in this.errorsMessages) {
-          this.errorsMessages[item] = messages[item] ?? [];
-        }
-      }
-    },
-  }
 };
 </script>
 
@@ -124,7 +118,7 @@ export default {
 
 .content {
   background: white;
-  box-shadow: 0 10px 34px -15px black;
+  box-shadow: 1px -1px 6px black;
   border-radius: 10px;
 }
 </style>

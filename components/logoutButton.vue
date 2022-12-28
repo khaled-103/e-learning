@@ -1,34 +1,43 @@
 <template>
   <div>
-    <button class="btn btn-dark" @click="Logout('user')">Logout user</button>
-    <button class="btn btn-dark" @click="Logout('orgnaization')">Logout orgnaization</button>
+    <button class="btn btn-dark" @click="Logout()">Logout</button>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { mapMutations } from "vuex";
+import { mapMutations,mapActions } from "vuex";
 export default {
-  methods:{
+  props: {
+    source: null,
+  },
+  methods: {
+    ...mapActions({
+      sendRequest: "auth/sendRequest",
+    }),
     ...mapMutations({
       setToken: "auth/setToken",
       setUser: "auth/setUser",
     }),
-    async Logout(source){
-        let result = await axios.post(`http://127.0.0.1:8000/api/logout`,{
-          token : this.$store.state.auth.token,
+    async Logout() {
+      let result = await this.sendRequest({
+        url: "http://127.0.0.1:8000/api/logout",
+        dataSend: {
+          token: this.$store.state.auth.token,
+        },
+      });
+      if (result.data.status) {
+        this.setToken(null);
+        this.setUser(null);
+        this.$cookies.remove("tokenInfo");
+        return this.$router.push({
+          name: this.source == "user" ? "user-login" : "orgnaization-login",
         });
-        if(result.data.status){
-          this.setToken(null);
-          this.setUser(null);
-          // delete cokkie from abdullla
-          return this.$router.push({name: source == 'user' ? 'login' : 'orgnaization-login'});
-        }
-    }
-  }
-}
+      }
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

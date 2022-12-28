@@ -1,11 +1,17 @@
 <template>
   <div>
-    <Tutorial />
+    test
   </div>
 </template>
 
 <script>
 export default {
-  name: "IndexPage",
-};
+    props:{
+        passData:[],
+    }
+}
 </script>
+
+<style>
+
+</style>
