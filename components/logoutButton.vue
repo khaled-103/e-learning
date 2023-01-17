@@ -21,7 +21,7 @@ export default {
     }),
     async Logout() {
       let result = await this.sendRequest({
-        url: "http://127.0.0.1:8000/api/logout",
+        url: "/logout",
         dataSend: {
           token: this.$store.state.auth.token,
         },

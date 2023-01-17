@@ -74,7 +74,7 @@ export default {
     async sendCodeToEmail() {
       this.spinnerLoadShow = true;
       let result = await this.sendRequest({
-        url: `http://127.0.0.1:8000/api/${this.type}/sendCodeToEmail`,
+        url: `/${this.type}/sendCodeToEmail`,
         dataSend: {
           email: this.email,
         },

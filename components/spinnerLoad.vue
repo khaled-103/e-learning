@@ -1,6 +1,7 @@
 <template>
   <span
-    class="spinner-border text-info spinner-border-sm"
+    class="spinner-border text-warning spinner-border-sm"
+    style="font-size:18px;"
     v-show="spinnerLoadShow"
   ></span>
 </template>

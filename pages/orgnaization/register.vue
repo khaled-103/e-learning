@@ -173,7 +173,7 @@
                   showVerifyPage = value;
                 }
               "
-              url="http://127.0.0.1:8000/api/orgnaization/sendVerifyEmail"
+              url="/orgnaization/sendVerifyEmail"
               :dataSend="{
                 name: name,
                 phone: phone,
@@ -204,7 +204,7 @@
             showVerifyPage = value;
           }
         "
-        url="http://127.0.0.1:8000/api/orgnaization/register"
+        url="/orgnaization/register"
         :dataSend="{
           name: name,
           phone: phone,

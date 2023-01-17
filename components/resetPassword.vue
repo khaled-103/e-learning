@@ -152,7 +152,7 @@ export default {
     async resetPassword() {
       this.spinnerLoadShow = true;
       let result = await this.sendRequest({
-        url: `http://127.0.0.1:8000/api/${this.type}/resetPassword`,
+        url: `/${this.type}/resetPassword`,
         dataSend: {
           email: this.email,
           code: this.code,

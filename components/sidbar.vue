@@ -13,8 +13,9 @@ export default {};
 .sidbar {
   position: fixed;
   height: 100%;
-  width: 240px;
-  background: linear-gradient(to bottom,#010816,#0a2558,#010816);
+  width: 230px;
+  background: #000;
+  /* background: linear-gradient(to bottom,#19428f,#010816)linear-gradient(to bottom,#010816,#19428f,#010816); */
   transition: all 0.5s ease;
 }
 

@@ -54,7 +54,7 @@
             </div>
 
             <login-button
-              url="http://127.0.0.1:8000/api/orgnaization/login"
+              url="/orgnaization/login"
               :dataSend="{ username: username, password: password }"
               :errorsMessages="errorsMessages"
               routeName="orgnaization-dashboard"

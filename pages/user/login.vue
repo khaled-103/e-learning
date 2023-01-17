@@ -54,7 +54,7 @@
             </div>
 
             <login-button
-              url="http://127.0.0.1:8000/api/user/login"
+              url="/user/login"
               :dataSend="{
                 username: username,
                 password: password,

@@ -4,6 +4,7 @@
       <i :class="icon"></i>
       <span class="links_name text-white">{{ data }}</span>
     </a>
+    <i class="fa fa-caret-down"></i>
   </li>
 </template>
 
@@ -16,7 +17,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.fa-caret-down{
+  position: absolute;
+  top: 15px;
+  right: 0;
+  cursor: pointer;
+}
 .side-link {
   position: relative;
   list-style: none;
@@ -30,7 +37,7 @@ export default {
 }
 .side-link a:hover,
 .side-link a:active {
-  background-color: #4175d6;
+  background-color: #19428f;
 }
 .side-link i {
   min-width: 60px;

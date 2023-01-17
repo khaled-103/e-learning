@@ -73,7 +73,7 @@ export default {
     async signUp() {
       this.spinnerLoadShow = true;
       let res = await this.sendRequest({
-        url: `http://127.0.0.1:8000/api/${
+        url: `/${
           this.source == "user" ? "user" : "orgnaization"
         }/checkVerifyCode`,
         dataSend: {

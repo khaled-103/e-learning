@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="container-fluid bg-white" style="box-shadow: 0px 0px 6px black">
+    <nav class="container-fluid" style="box-shadow:1px 1px 6px black;">
       <ul
         class="d-flex justify-content-between"
         style="list-style: none; padding-left: 0"
@@ -10,7 +10,7 @@
             <i class="fa-solid fa-bars" style="font-size: 25px"></i>
           </button>
           <a href="#search" data-toggle="collapse" class="" style="position:relative;" >
-            <div class="search-box bg-white" style="position:absolute;top:0;left:0;z-index:2;">
+            <div class="search-box " style="position:absolute;top:0;left:0;z-index:2;">
               <button class="btn-search"><i class="fas fa-search"></i></button>
               <input
                 type="text"
@@ -26,24 +26,25 @@
               <div class="dropdown">
                 <button
                   type="button"
-                  class="btn btn-primary dropdown-toggle"
+                  class="btn btn-white dropdown-toggle"
                   data-bs-toggle="dropdown"
-                  style="background-color: #0a2558; color: wheat"
+                  style="background-color: black; color: white"
                 >
                   English <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" style="transform: tra">
+                <ul class="dropdown-menu" style="">
                   <li><a class="dropdown-item" href="#">English</a></li>
                   <li><a class="dropdown-item" href="#">Arabic</a></li>
                 </ul>
               </div>
             </li>
             <li class="mt-2">
-              <a href="#"><i class="fa-regular fa-bell"></i></a>
+              <a href="#"><i class="text-dark fa-regular fa-bell"></i></a>
             </li>
-            <li class="mt-1">
-              <a href="#"
+            <li class="mt-1 ">
+              <a  href="#"
                 ><img
+                class="border border-dark"
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbVrOTLM4QqS0o214EJZcsmt4Jd_OjdqY8JA&usqp=CAU"
                   alt=""
               /></a>
@@ -76,18 +77,20 @@ nav img {
   width: fit-content;
   height: fit-content;
   position: relative;
+  border-radius: 20px;
+  border: 1px solid black;
 }
 .input-search {
   height: 50px;
   width: 50px;
-  border-style: 1px solid black;
+  border-style: none;
   padding: 5px;
   font-size: 18px;
   letter-spacing: 2px;
   outline: none;
   border-radius: 25px;
   transition: all 0.5s ease-in-out;
-  padding-right: 40px;
+  padding-right: 45px;
 }
 .input-search::placeholder {
   color: black;
@@ -113,14 +116,12 @@ nav img {
   width: 350px;
   border-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid black;
   transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
 .input-search:focus {
   width: 350px;
   border-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid black;
   transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
 </style>

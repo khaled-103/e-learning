@@ -132,7 +132,7 @@
                   showVerifyPage = value;
                 }
               "
-              url="http://127.0.0.1:8000/api/user/sendVerifyEmail"
+              url="/user/sendVerifyEmail"
               :dataSend="{
                 first_name: first_name,
                 last_name: last_name,
@@ -160,7 +160,7 @@
             showVerifyPage = value;
           }
         "
-        url="http://127.0.0.1:8000/api/user/register"
+        url="/user/register"
         :dataSend="{
           first_name: first_name,
           last_name: last_name,
