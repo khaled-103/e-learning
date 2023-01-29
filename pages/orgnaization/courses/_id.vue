@@ -1,43 +1,161 @@
 <template>
-  <div style="" class="border border-dark mx-3  bg-white">
-    <div class="d-flex border-bottom border-dark">
-      <a @click="shown = 0"  class="list-group-item item_header" style="border-right: 1px black solid;">information Course</a>
-      <a @click="shown = 1" class="list-group-item item_header" style="border-right: 1px black solid;">Lecture file</a>
-      <a  class="list-group-item item_header ">publish</a>
+  <div style="" class="m-3">
+    <div class="row justify-content-between my-4">
+      <div class="col-auto mt-2">
+        <nuxt-link to="/orgnaization/dashboard">DASHBOARD /</nuxt-link>
+        <nuxt-link to="/orgnaization/coursesList">COURSES LIST</nuxt-link>
+        <span class="text-white">/ {{ courseName }}</span>
+      </div>
+    </div>
+
+    <h2 class="text-center mb-5 text-white">
+      Course Control <i class="fa-solid fa-gears"></i>
+    </h2>
+
+    <div class="sections-header row justify-content-start">
+      <h6
+        :class="[
+          'section-header',
+          'col-lg-auto col-4',
+          'pb-2',
+          'px-3',
+          'pointer',
+          { active: hasActiveClass[0] },
+        ]"
+        @click="changeSectionShow(0)"
+      >
+        Course Information
+      </h6>
+      <h6
+        :class="[
+          'section-header',
+          'col-lg-auto col-3',
+          'pb-2',
+          'px-3',
+          'pointer',
+          { active: hasActiveClass[1] },
+        ]"
+        @click="changeSectionShow(1)"
+      >
+        Course Content
+      </h6>
+      <h6
+        :class="[
+          'section-header',
+          'col-lg-auto col-5',
+          'pb-2',
+          'px-3',
+          'pointer',
+          { active: hasActiveClass[2] },
+        ]"
+        @click="changeSectionShow(2)"
+      >
+        Publishing
+      </h6>
+      <hr />
+    </div>
+    <div v-show="spinnerLoadShow" class="text-center">
+      <h6 class="text-white">Loading... <spinner-load :spinnerLoadShow="spinnerLoadShow" /></h6>
     </div>
     <!-- <information-couse /> -->
-    <formCourse :id="$route.params.id" action1='Show' v-show="shown == 0"/>
-    <!-- <add-curriculum v-show="shown == 1"/> -->
+    <formCourse
+      @getName="
+        (value) => {
+          courseName = value;
+        }
+      "
+      v-if="courseStatus"
+      :id="$route.params.id"
+      action1="Show"
+      v-show="shown == 0"
+    />
+    <publishing
+      @changeStatus="
+        (value) => {
+          courseStatus = value;
+        }
+      "
+      :courseStatus="courseStatus"
+      v-show="shown == 2"
+    />
+    <add-curriculum :courseid="$route.params.id" v-show="shown == 1"/>
     <!-- <formCourse action='Update'/> -->
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   layout: "dashBoardLayout",
-  data(){
+  data() {
     return {
-      shown :0,
-      filePreview: '',
-      fileName: '',
+      spinnerLoadShow: false,
+      shown: 0,
+      filePreview: "",
+      fileName: "",
+      courseStatus: null,
+      hasActiveClass: [true, false, false],
+      courseName: "Course Name",
+    };
+  },
+  methods: {
+    ...mapActions({
+      sendRequest: "auth/sendRequest",
+    }),
+    ...mapGetters({
+      getToken: "auth/getToken",
+    }),
+    changeSectionShow(sectionNumber) {
+      this.shown = sectionNumber;
+      this.alertActiveClasse(sectionNumber);
+    },
+    alertActiveClasse(sectionNumber) {
+      this.hasActiveClass = [false, false, false];
+      this.hasActiveClass[sectionNumber] = true;
+    },
+  },
+  async mounted() {
+    this.spinnerLoadShow = true;
+    let result = await this.sendRequest({
+      url: "/orgnaization/getCourseStatus",
+      dataSend: {
+        course_id: this.$route.params.id,
+      },
+    });
+    this.spinnerLoadShow = false;
+    if (result.data.status) {
+      this.courseStatus = result.data.courseStatus.status;
     }
-  }
-}
+  },
+};
 </script>
 
-<style>
-.item_header {
-  width: 33.33%;
-  text-decoration: none;
+<style scoped>
+.pointer {
   cursor: pointer;
-  text-align: center;
-  background-color: rgb(211, 209, 240);
-  padding: 15px;
 }
-
-.item_header:hover , .item_header:active {
-  background-color:#15397c;
-  color: white;
+.sections-header {
+  position: relative;
+}
+a {
+  color: #a4a4b2;
   text-decoration: none;
+}
+hr {
+  position: absolute;
+  bottom: -8px;
+  color: white;
+}
+.section-header {
+  /* color: #687484; */
+  color: white;
+  text-align: center;
+}
+.section-header:hover {
+  border-bottom: 2.5px solid #0258e3;
+}
+.active {
+  /* color: #42bbff; */
+  border-bottom: 2.5px solid #0258e3;
 }
 </style>

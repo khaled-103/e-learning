@@ -14,7 +14,7 @@ export default {};
   position: fixed;
   height: 100%;
   width: 230px;
-  background: #000;
+  background: #1d1d41;
   /* background: linear-gradient(to bottom,#19428f,#010816)linear-gradient(to bottom,#010816,#19428f,#010816); */
   transition: all 0.5s ease;
 }

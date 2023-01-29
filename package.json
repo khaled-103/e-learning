@@ -9,6 +9,9 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^35.4.0",
+    "@ckeditor/ckeditor5-vue": "^4.0.1",
+    "@ckeditor/ckeditor5-vue2": "^3.0.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/vue-fontawesome": "^2.0.9",
     "@nuxtjs/axios": "^5.13.6",
@@ -23,6 +26,7 @@
     "nuxt": "^2.15.8",
     "nuxt-tailvue": "^1.0.95",
     "vue": "^2.7.10",
+    "vue-multiselect": "^2.1.7",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10"
   }

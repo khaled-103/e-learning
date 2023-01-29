@@ -3,7 +3,7 @@ import axios from "axios";
 export const state = () => ({
   token: null,
   user: null,
-  domain:'http://127.0.0.1:8000/api'
+  domain: "http://127.0.0.1:8000/",
 });
 
 export const getters = {
@@ -12,6 +12,9 @@ export const getters = {
   },
   getUser(state) {
     return state.user;
+  },
+  getDomain(state) {
+    return state.domain;
   },
 };
 
@@ -26,8 +29,10 @@ export const mutations = {
 
 export const actions = {
   async sendRequest({ state }, { url, dataSend }) {
-    let result = await axios.post(state.domain+url, dataSend, {
-      headers: { "x-laravel-version": "v9" },
+    let result = await axios.post(state.domain+'api' + url, dataSend, {
+      headers: {
+        "x-laravel-version": "v9"
+      },
     });
     return result;
   },

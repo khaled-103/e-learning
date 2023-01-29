@@ -19,7 +19,7 @@ head:{
 }
 </script>
 
-<style>
+<style scoped>
 @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css';
 @import 'https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css';
 @import 'https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap';

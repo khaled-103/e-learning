@@ -3,9 +3,9 @@
     <button
       @click.prevent="login()"
       type="submit"
-      class="btn btn-primary x-button"
+      class="btn btn-primary x-button mt-1"
     >
-      Sign In
+      Login
     </button>
     <spinner-load :spinnerLoadShow="spinnerLoadShow"/>
   </div>
@@ -77,5 +77,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.x-button {
+  color: white;
+  width: 100%;
+  padding: 4px 10px;
+  border-radius: 25px;
+}
 </style>

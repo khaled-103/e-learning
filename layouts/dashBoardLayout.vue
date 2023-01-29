@@ -3,8 +3,8 @@
     <sidbar />
     <div class="home-section">
       <navbar />
-      <div class="holder my-3 mx-5">
-        <div class=" mainContent  p-5">
+      <div class="holder pb-5 mx-5">
+        <div class=" mainContent py-2 px-5">
           <Nuxt />
         </div>
       </div>
@@ -32,29 +32,27 @@ export default {
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css";
 @import "https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css";
-@import "https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap";
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
 
-body{
-  background: #fafafa;
-}
+
 
 .mainContent {
-  box-shadow: 0 0 5px black;
+  background: #1d1d41;
+  border-radius: 20px;
 }
 * {
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
 }
 .home-section {
   position: relative;
-  min-height: 100vh;
   width: calc(100% - 230px);
   left: 230px;
-  background: #fff;
   transition: all 0.5s ease;
+  background: #141332;
 }
 
 
@@ -62,6 +60,10 @@ body{
   .home-section {
     width: 100%;
     left: 0;
+  }
+  .mainContent{
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
 }
 @media (max-width: 900px) {

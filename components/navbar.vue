@@ -1,24 +1,23 @@
 <template>
   <div>
-    <nav class="container-fluid" style="box-shadow:1px 1px 6px black;">
+    <nav class="container-fluid" style="">
       <ul
         class="d-flex justify-content-between"
         style="list-style: none; padding-left: 0"
       >
-        <li class="mt-2 d-flex" >
-          <button class="d-md-none d-block m-2 btn close-btn open-side">
-            <i class="fa-solid fa-bars" style="font-size: 25px"></i>
-          </button>
-          <a href="#search" data-toggle="collapse" class="" style="position:relative;" >
-            <div class="search-box " style="position:absolute;top:0;left:0;z-index:2;">
-              <button class="btn-search"><i class="fas fa-search"></i></button>
-              <input
-                type="text"
-                class="input-search"
-                placeholder="Type to Search..."
-              />
-            </div>
-          </a>
+        <li class="mt-2 d-flex">
+          <div class="" style="position:relative;border">
+            <input
+              type="text"
+              id="myInput"
+              placeholder="Search here.."
+              title="Type in a name"
+            />
+            <i
+              class="fa fa-search text-white"
+              style="position: absolute; left: 12px; top: 19px; font-size: 18px"
+            ></i>
+          </div>
         </li>
         <li>
           <ul class="d-flex" style="list-style: none">
@@ -28,7 +27,7 @@
                   type="button"
                   class="btn btn-white dropdown-toggle"
                   data-bs-toggle="dropdown"
-                  style="background-color: black; color: white"
+                  style="background-color: white; color: black"
                 >
                   English <span class="caret"></span>
                 </button>
@@ -39,15 +38,15 @@
               </div>
             </li>
             <li class="mt-2">
-              <a href="#"><i class="text-dark fa-regular fa-bell"></i></a>
+              <a href="#"><i class="text-white fa-regular fa-bell"></i></a>
             </li>
-            <li class="mt-1 ">
-              <a  href="#"
-                ><img
-                class="border border-dark"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbVrOTLM4QqS0o214EJZcsmt4Jd_OjdqY8JA&usqp=CAU"
-                  alt=""
-              /></a>
+            <li class="mt-2">
+              <img
+                @click="goToProfile"
+                class="pointer d-md-block d-none"
+                :src="profileImage"
+                alt=""
+              />
             </li>
           </ul>
         </li>
@@ -57,10 +56,45 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters, mapActions } from "vuex";
+export default {
+  data() {
+    return {
+      domain: this.getDomain(),
+      profileImage: null,
+    };
+  },
+  methods: {
+    ...mapGetters({
+      getDomain: "auth/getDomain",
+      getToken: "auth/getToken",
+    }),
+    ...mapActions({
+      sendRequest: "auth/sendRequest",
+    }),
+    goToProfile() {
+      this.$router.push("/orgnaization/profile");
+    },
+  },
+
+  async mounted() {
+    let result = await this.sendRequest({
+      url: "/orgnaization/getProfileImage",
+      dataSend: {
+        id: this.getToken().tokenable_id,
+      },
+    });
+    if (result.data.status) {
+      this.profileImage = result.data.orgProfileInfo.image;
+    }
+  },
+};
 </script>
 
 <style>
+.pointer {
+  cursor: pointer;
+}
 .fa-magnifying-glass,
 .fa-bell {
   padding: 16px;
@@ -68,60 +102,20 @@ export default {};
 }
 
 nav img {
-  width: 45px;
-  height: 45px;
+  vertical-align: middle;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin: 8px;
 }
-.search-box {
-  width: fit-content;
-  height: fit-content;
-  position: relative;
-  border-radius: 20px;
-  border: 1px solid black;
-}
-.input-search {
-  height: 50px;
-  width: 50px;
-  border-style: none;
-  padding: 5px;
-  font-size: 18px;
-  letter-spacing: 2px;
-  outline: none;
-  border-radius: 25px;
-  transition: all 0.5s ease-in-out;
-  padding-right: 45px;
-}
-.input-search::placeholder {
-  color: black;
-  font-size: 12px;
-  letter-spacing: 2px;
-}
-.btn-search {
-  width: 50px;
-  height: 50px;
-  border-style: none;
-  font-size: 20px;
-  font-weight: bold;
-  outline: none;
-  cursor: pointer;
-  border-radius: 50%;
-  position: absolute;
-  right: 0px;
-  color: black;
+
+#myInput {
   background-color: transparent;
-  pointer-events: painted;
-}
-.btn-search:focus ~ .input-search {
-  width: 350px;
-  border-radius: 0px;
-  background-color: transparent;
-  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
-}
-.input-search:focus {
-  width: 350px;
-  border-radius: 0px;
-  background-color: transparent;
-  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+  border: 1px solid #73719a;
+  border-radius: 15px;
+  background-position: 10px 12px;
+  font-size: 16px;
+  padding: 10px 20px 10px 40px;
+  color: white;
+  margin-top: 5px;
 }
 </style>

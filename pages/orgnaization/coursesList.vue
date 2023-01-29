@@ -2,13 +2,18 @@
   <div>
     <div class="row justify-content-between my-4">
       <div class="col-auto mt-2">
-        <nuxt-link to="/index">Dashboard</nuxt-link>
-        <span>/CourseLists</span>
+        <nuxt-link to="/orgnaization/dashboard">DASHBOARD</nuxt-link>
+        <span class="text-white">/ COURSES LIST</span>
       </div>
-      <button @click="$router.push({name:'orgnaization-addCourse'})" class="btn btn-sm btn-outline-dark col-auto p-2">Add New Course</button>
+      <button
+        @click="$router.push({ name: 'orgnaization-addCourse' })"
+        class="btn btn-sm btn-outline-light col-auto p-2"
+      >
+        Add New Course
+      </button>
     </div>
     <div class="">
-      <h2 class="text-center mb-5">
+      <h2 class="text-center mb-5 text-white">
         Courses List <i class="fa-solid fa-graduation-cap"></i>
       </h2>
       <div class="row justify-content-center">
@@ -59,7 +64,10 @@
           </div>
         </div>
       </div>
-      <div class="d-flex justify-content-between">
+      <div
+        class="d-flex justify-content-between mt-4"
+        style="position:relative;border"
+      >
         <input
           type="text"
           v-model="searchInput"
@@ -67,23 +75,29 @@
           @keyup="search()"
           placeholder="Search here.."
           title="Type in a name"
-          style="flex-basis: 80%"
+          style="flex-basis: 75%"
         />
+        <i
+          class="fa fa-search text-white"
+          style="position: absolute; left: 10px; top: 16px; font-size: 18px"
+        ></i>
         <button
           @click="reset()"
           class="btn btn-danger mt-2"
-          style="width: 70px; height: 40px"
+          style="width: auto; height: 40px"
         >
-          Reset
+          Reset <i class="fa fa-refresh"></i>
         </button>
       </div>
       <div class="my-2 row justify-content-center">
         <div class="text-center" v-show="spinnerLoadShow">
-          <h6>Proccessing... <spinner-load :spinnerLoadShow="spinnerLoadShow"/></h6>
+          <h6 class="text-white">
+            Proccessing... <spinner-load :spinnerLoadShow="spinnerLoadShow" />
+          </h6>
         </div>
-        <table v-show="!spinnerLoadShow" class="bg-white table table-bordered">
+        <table v-show="!spinnerLoadShow">
           <thead>
-            <tr>
+            <tr style="color: white; border-bottom: 1px solid white">
               <th>#</th>
               <th>Name</th>
               <th>Status</th>
@@ -95,16 +109,16 @@
           <tbody class="">
             <tr :key="course.id" v-for="(course, index) in showingList">
               <td>{{ index + 1 }}</td>
-              <nuxt-link
-                class="mt-1 text-dark d-block"
-                style="
-                  background: none;
-                  font-weight: 500;
-                  text-decoration: underline;
-                "
-                :to="{name:'orgnaization-courses-id',params: { id: course.id }}"
-                ><td>{{ course.name }}</td></nuxt-link
-              >
+              <td>
+                <nuxt-link
+                  class="mt-1"
+                  :to="{
+                    name: 'orgnaization-courses-id',
+                    params: { id: course.id },
+                  }"
+                  >{{ course.name }}</nuxt-link
+                >
+              </td>
               <td>{{ course.status.status }}</td>
               <td>{{ course.price }}$</td>
               <td>{{ course.subscribe.numOfSubscribe }}</td>
@@ -130,7 +144,7 @@
 </template>
 
 <script>
-import { mapGetters,mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   layout: "dashBoardLayout",
   data() {
@@ -143,7 +157,7 @@ export default {
       coursesList: [],
       filteredList: [],
       showingList: [],
-      spinnerLoadShow:false
+      spinnerLoadShow: false,
     };
   },
   methods: {
@@ -154,11 +168,12 @@ export default {
       sendRequest: "auth/sendRequest",
     }),
     orderCourses() {
+      console.log('order exec');
       this.showingList = Array.from(this.filteredList);
       if (this.ordered == "des") this.showingList.reverse();
     },
     sortCourses() {
-
+      console.log('sort exec');
       this.filteredList.sort((a, b) => {
         if (this.sort == "price") {
           return parseFloat(a.price) >= parseFloat(b.price) ? 1 : -1;
@@ -167,13 +182,17 @@ export default {
           return a.rating.rate >= b.rating.rate ? 1 : -1;
         }
         if (this.sort == "subscribers") {
-          return parseInt(a.subscribe.numOfSubscribe) >= parseInt(b.subscribe.numOfSubscribe) ? 1 : -1;
+          return parseInt(a.subscribe.numOfSubscribe) >=
+            parseInt(b.subscribe.numOfSubscribe)
+            ? 1
+            : -1;
         }
         return a.created_at >= b.created_at ? -1 : 1;
       });
       this.orderCourses();
     },
     search() {
+      console.log('serach exec');
       this.showingList = this.filteredList.filter((value) => {
         return value.name
           .toLowerCase()
@@ -181,6 +200,7 @@ export default {
       });
     },
     filterCourses() {
+      console.log('filter exec');
       if (this.status.length == 0 && this.rating.length == 0) {
         this.filteredList = Array.from(this.coursesList);
         this.showingList = Array.from(this.filteredList);
@@ -190,7 +210,8 @@ export default {
       this.filteredList = this.coursesList.filter((value) => {
         let check = true;
         if (this.status.length > 0)
-          check = value.status.status.toLowerCase() == this.status.toLowerCase();
+          check =
+            value.status.status.toLowerCase() == this.status.toLowerCase();
         if (this.rating.length > 0)
           check =
             check &&
@@ -214,56 +235,18 @@ export default {
   async mounted() {
     this.spinnerLoadShow = true;
     let result = await this.sendRequest({
-      url:'/orgnaization/allCourses',
-      dataSend:{
-        token:this.getToken()
-      }
+      url: "/orgnaization/allCourses",
+      dataSend: {
+        token: this.getToken(),
+      },
     });
-    if(result.data.status){
+    if (result.data.status) {
       console.log(result.data.courses);
       this.coursesList = result.data.courses;
       this.spinnerLoadShow = false;
-    }else{
-        return this.$router.push('/error');
+    } else {
+      return this.$router.push("/error");
     }
-    // this.coursesList = [
-    //   {
-    //     id: 1,
-    //     name: "unity3d",
-    //     status: "published",
-    //     price: "60",
-    //     rating: 5,
-    //     subscribers: 120,
-    //     createdAt: new Date("2022-12-30"),
-    //   },
-    //   {
-    //     id: 2,
-    //     name: "laravel",
-    //     status: "Not published",
-    //     price: "10",
-    //     rating: 2,
-    //     subscribers: 10,
-    //     createdAt: new Date("2022-12-28"),
-    //   },
-    //   {
-    //     id: 3,
-    //     name: "vue js",
-    //     status: "Not Published",
-    //     price: "120",
-    //     rating: 4,
-    //     subscribers: 50,
-    //     createdAt: new Date("2022-12-26"),
-    //   },
-    //   {
-    //     id: 4,
-    //     name: "nuxtjs",
-    //     status: "published",
-    //     price: "30",
-    //     rating: 3,
-    //     subscribers: 69,
-    //     createdAt: new Date("2022-12-21"),
-    //   },
-    // ];
     this.filteredList = Array.from(this.coursesList);
     this.showingList = Array.from(this.coursesList);
   },
@@ -271,76 +254,45 @@ export default {
 </script>
 
 <style scoped>
-table,
-input,
-.select {
-  border: 1px solid #ddd !important;
+table {
+  border: none !important;
+  color: #a4a4b2;
+  margin: 15px 0 15px 22px;
 }
+td {
+  padding: 6px 0;
+}
+
 select {
-  /* Reset Select */
-  appearance: none;
-  outline: 0;
-  border: 0;
-  box-shadow: none;
-  /* Personalize */
-  flex: 1;
-  padding: 0 1em;
-  color: black;
-  background-color: white;
-  background-image: none;
-  cursor: pointer;
+  width: 100%;
+  background: transparent;
+  border: 1px solid #73719a;
+  color: white;
+  padding: 4px 10px;
 }
-/* Remove IE arrow */
-select::-ms-expand {
-  display: none;
-}
-/* Custom Select wrapper */
-.select {
-  position: relative;
-  display: flex;
-  height: 2em;
-  border-radius: 0.25em;
-  overflow: hidden;
-  box-shadow: 0px 0px 1px #0f0c29;
-  padding-left: 0;
-  margin-right: 4px;
-}
-/* Arrow */
-.select::after {
-  content: "\25BC";
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0.5em;
-  background-color: white;
-  transition: 0.25s all ease;
-  pointer-events: none;
-  color: black;
-}
-/* Transition */
-.select:hover::after {
-  color: #f39c12;
+
+select option {
+  color: white;
+  padding: 4px;
+  background: #1d1d41;
 }
 
 /* Other styles*/
 
 a {
-  font-weight: bold;
-  color: #34495e;
+  color: #a4a4b2;
   text-decoration: none;
-  padding: 0.25em;
-  border-radius: 0.25em;
-  background: white;
 }
 
 #myInput {
-  background-image: url("https://www.w3schools.com/css/searchicon.png");
+  background-color: transparent;
+  border:1px solid #73719a ;
+  border-radius: 15px;
   background-position: 10px 12px;
-  background-repeat: no-repeat;
   font-size: 16px;
-  padding: 12px 20px 12px 40px;
-  border: 1px solid #ddd;
+  padding: 8px 20px 8px 40px;
   margin-bottom: 12px;
+  color: white;
 }
 
 @media (max-width: 850px) {
@@ -353,5 +305,6 @@ a {
   table tr {
     font-size: 14px;
   }
+
 }
 </style>

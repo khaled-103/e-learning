@@ -1,12 +1,19 @@
 <template>
   <div>
-    <button class="btn btn-dark" @click="Logout()">Logout</button>
+    <li class="side-link">
+      <a
+        class="d-flex align-items-center text-decoration-none text-white"
+        @click="Logout()"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span class="links_name">Logout</span>
+      </a>
+    </li>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import { mapMutations,mapActions } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 export default {
   props: {
     source: null,
@@ -39,5 +46,37 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.side-link {
+  position: relative;
+  list-style: none;
+  height: 50px;
+  margin: 0 15px 0 15px;
+  border-radius: 10px 10px 0 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.side-link a {
+  height: 100%;
+  width: 100%;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+.side-link a:hover,
+.side-link a:active {
+  background: #0258e3;
+  border-radius: 10px;
+}
+.side-link i {
+  min-width: 60px;
+  text-align: center;
+  font-size: 18px;
+  color: white;
+}
+
+.side-link a .links_name {
+  font-size: 15px;
+  font-weight: 400;
+}
 </style>
