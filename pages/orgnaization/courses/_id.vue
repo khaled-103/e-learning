@@ -1,5 +1,5 @@
 <template>
-  <div style="" class="m-3">
+  <div style="" class="">
     <div class="row justify-content-between my-4">
       <div class="col-auto mt-2">
         <nuxt-link to="/orgnaization/dashboard">DASHBOARD /</nuxt-link>
@@ -12,51 +12,53 @@
       Course Control <i class="fa-solid fa-gears"></i>
     </h2>
 
-    <div class="sections-header row justify-content-start">
-      <h6
-        :class="[
-          'section-header',
-          'col-lg-auto col-4',
-          'pb-2',
-          'px-3',
-          'pointer',
-          { active: hasActiveClass[0] },
-        ]"
-        @click="changeSectionShow(0)"
-      >
-        Course Information
-      </h6>
-      <h6
-        :class="[
-          'section-header',
-          'col-lg-auto col-3',
-          'pb-2',
-          'px-3',
-          'pointer',
-          { active: hasActiveClass[1] },
-        ]"
-        @click="changeSectionShow(1)"
-      >
-        Course Content
-      </h6>
-      <h6
-        :class="[
-          'section-header',
-          'col-lg-auto col-5',
-          'pb-2',
-          'px-3',
-          'pointer',
-          { active: hasActiveClass[2] },
-        ]"
-        @click="changeSectionShow(2)"
-      >
-        Publishing
-      </h6>
+    <div class="sections-header">
+      <div class="d-flex justify-content-start">
+        <h6
+          :class="[
+            'section-header',
+            'pb-2',
+            'px-3',
+            'pointer',
+            { active: hasActiveClass[0] },
+          ]"
+          @click="changeSectionShow(0)"
+        >
+          Course Information
+        </h6>
+        <h6
+          :class="[
+            'section-header',
+            'pb-2',
+            'px-3',
+            'pointer',
+            { active: hasActiveClass[1] },
+          ]"
+          @click="changeSectionShow(1)"
+        >
+          Course Content
+        </h6>
+        <h6
+          :class="[
+            'section-header',
+            'pb-2',
+            'px-3',
+            'pointer',
+            { active: hasActiveClass[2] },
+          ]"
+          @click="changeSectionShow(2)"
+        >
+          Publishing
+        </h6>
+      </div>
       <hr />
     </div>
-    <div v-show="spinnerLoadShow" class="text-center">
-      <h6 class="text-white">Loading... <spinner-load :spinnerLoadShow="spinnerLoadShow" /></h6>
-    </div>
+
+    <!-- <div v-show="spinnerLoadShow" class="text-center">
+      <h6 class="text-white">
+        Loading... <spinner-load :spinnerLoadShow="spinnerLoadShow" />
+      </h6>
+    </div> -->
     <!-- <information-couse /> -->
     <formCourse
       @getName="
@@ -64,10 +66,13 @@
           courseName = value;
         }
       "
-      v-if="courseStatus"
       :id="$route.params.id"
       action1="Show"
       v-show="shown == 0"
+      @emitFinishInit="(value) => {
+        getPublishStatus();
+        readyToInit= value;
+      }"
     />
     <publishing
       @changeStatus="
@@ -78,7 +83,7 @@
       :courseStatus="courseStatus"
       v-show="shown == 2"
     />
-    <add-curriculum :courseid="$route.params.id" v-show="shown == 1"/>
+    <add-curriculum v-if="readyToInit" :courseid="$route.params.id" v-show="shown == 1" />
     <!-- <formCourse action='Update'/> -->
   </div>
 </template>
@@ -96,6 +101,7 @@ export default {
       courseStatus: null,
       hasActiveClass: [true, false, false],
       courseName: "Course Name",
+      readyToInit:false
     };
   },
   methods: {
@@ -113,19 +119,30 @@ export default {
       this.hasActiveClass = [false, false, false];
       this.hasActiveClass[sectionNumber] = true;
     },
+    async getPublishStatus() {
+      let result = await this.sendRequest({
+        url: "/orgnaization/getCourseStatus",
+        dataSend: {
+          course_id: this.$route.params.id,
+        },
+      });
+      if (result.data.status) {
+        this.courseStatus = result.data.courseStatus.status;
+      }
+    },
   },
   async mounted() {
-    this.spinnerLoadShow = true;
-    let result = await this.sendRequest({
-      url: "/orgnaization/getCourseStatus",
-      dataSend: {
-        course_id: this.$route.params.id,
-      },
-    });
-    this.spinnerLoadShow = false;
-    if (result.data.status) {
-      this.courseStatus = result.data.courseStatus.status;
-    }
+    // this.spinnerLoadShow = true;
+    // let result = await this.sendRequest({
+    //   url: "/orgnaization/getCourseStatus",
+    //   dataSend: {
+    //     course_id: this.$route.params.id,
+    //   },
+    // });
+    // this.spinnerLoadShow = false;
+    // if (result.data.status) {
+    //   this.courseStatus = result.data.courseStatus.status;
+    // }
   },
 };
 </script>
@@ -145,11 +162,14 @@ hr {
   position: absolute;
   bottom: -8px;
   color: white;
+  width: 100%;
 }
 .section-header {
   /* color: #687484; */
   color: white;
+  font-size: 14px;
   text-align: center;
+  font-weight: 400;
 }
 .section-header:hover {
   border-bottom: 2.5px solid #0258e3;

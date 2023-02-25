@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .item_header {
   width: 33.33%;
   text-decoration: none;

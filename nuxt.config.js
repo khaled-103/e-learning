@@ -11,6 +11,10 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
+  env: {
+    stripePublishableKey: "pk_test_51Meg81Loe7VzYnJpefrOlBo3mSkbspAoN4A1dyaMbUJi102yGKjRiDoTQTeBD2FxJDMtAdMPbAc9q3IpjoD0X8RO00jcUe8XOp",
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
@@ -30,6 +34,7 @@ export default {
     // "bootstrap-vue/nuxt",
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
+    // "@nuxtjs/proxy",
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     'cookie-universal-nuxt',
@@ -54,5 +59,7 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    // vendor: ["axios"],
+  },
 };

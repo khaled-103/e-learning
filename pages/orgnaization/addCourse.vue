@@ -2,9 +2,9 @@
   <div>
     <div class="row justify-content-between my-4">
       <div class="col-auto mt-2">
-        <nuxt-link :to="{name:'orgnaization-dashboard'}">DASHBOARD /</nuxt-link>
-        <nuxt-link :to="{name:'orgnaization-coursesList'}">COURSES LIST</nuxt-link>
-        <span class="text-white">/ ADD COURSE</span>
+        <nuxt-link  :to="{name:'orgnaization-dashboard'}">DASHBOARD /</nuxt-link>
+        <nuxt-link  :to="{name:'orgnaization-coursesList'}">COURSES LIST</nuxt-link>
+        <span  class="text-white">/ ADD COURSE</span>
       </div>
     </div>
     <div class="content mx-3 pb-2 mb-5">

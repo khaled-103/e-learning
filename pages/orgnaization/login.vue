@@ -6,16 +6,19 @@
           :showGeneralError="showGeneralError"
           :generalError="generalError"
         />
-        <div class="row" style="box-shadow:1px 1px 5px #333;border-radius:10px 0 10px 10px;">
-          <div class="col-md-6 col-11" style="margin:auto;padding:0 !important;">
+        <div
+          class="row"
+          style="box-shadow: 1px 1px 5px #333; border-radius: 10px 0 10px 10px"
+        >
+          <div
+            class="col-md-6 col-11"
+            style="margin: auto; padding: 0 !important"
+          >
             <div class="content mt-2 mx-2 py-5 px-4">
               <h2 class="my-3">Login</h2>
               <form action="/action_page.php">
                 <div class="mb-3" style="position: relative">
-                  <i
-                    class="fa fa-user icons"
-
-                  ></i>
+                  <i class="fa fa-user icons"></i>
                   <input
                     type="text"
                     style="padding-left: 42px"
@@ -38,10 +41,7 @@
                   </p>
                 </div>
                 <div class="mb-3" style="position: relative">
-                  <i
-                    class="fa fa-lock icons"
-
-                  ></i>
+                  <i class="fa fa-lock icons"></i>
                   <input
                     type="password"
                     :class="[
@@ -83,20 +83,23 @@
                 />
                 <div class="mt-3">
                   <nuxt-link
-                    class="btn btn-sm btn-outline-dark options-login"
-                    :to="{ name: 'orgnaization-register' }"
-                    >Create Account</nuxt-link
-                  >
-                  <nuxt-link
-                    class="btn btn-sm btn-outline-dark options-login"
-                    :to="{ name: 'orgnaization-forgetPassword' }"
-                    >Forget Password</nuxt-link
-                  >
+                  class="btn btn-sm btn-outline-dark options-login"
+                  :to="{ name: 'orgnaization-register' }"
+                  >Create Account</nuxt-link
+                >
+                <nuxt-link
+                  class="btn btn-sm btn-outline-dark options-login"
+                  :to="{ name: 'orgnaization-forgetPassword' }"
+                  >Forget Password</nuxt-link
+                >
                 </div>
               </form>
             </div>
           </div>
-          <div class="col-md-6 col-11 d-md-block d-none" style="padding: 0 !important;border-left:1px solid #999;">
+          <div
+            class="col-md-6 col-11 d-md-block d-none"
+            style="padding: 0 !important; border-left: 1px solid #999"
+          >
             <img src="~/assets/auth/cryptocurrency.png" width="100%" alt="" />
           </div>
         </div>
@@ -132,7 +135,6 @@ export default {
   font-size: 24px;
 }
 
-
 .icons {
   font-size: 20px;
   color: #3c3d42;
@@ -150,10 +152,9 @@ img {
   height: 100%;
   object-fit: contain;
 }
-.options-login{
-  padding: 5px 20px;
+.options-login {
+  padding: 5px 10px;
   border-radius: 15px;
   text-decoration: none;
 }
-
 </style>

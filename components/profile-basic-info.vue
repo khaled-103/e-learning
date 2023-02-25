@@ -202,7 +202,7 @@ input:disabled{
 input,
 select {
   border: 1px solid #a4a4b2;
-  padding: 5px 10px;
+  padding: 5px 15px;
   width: 100%;
   border-radius: 20px;
 }

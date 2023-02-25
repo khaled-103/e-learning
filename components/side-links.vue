@@ -22,8 +22,8 @@
     </li>
     <div class="dropdown-container">
       <!-- <span class="" style="color:gray;font-size:13px: marin-left:30px">details : </span> -->
-      <nuxt-link style="font-size:16px;" :to="{name:'orgnaization-coursesList'}">CoursesList</nuxt-link>
-      <nuxt-link style="font-size:16px;" :to="{name:'orgnaization-addCourse'}">AddCourse</nuxt-link>
+      <nuxt-link style="font-size:17px;" :to="{name:'orgnaization-coursesList'}">CoursesList</nuxt-link>
+      <nuxt-link style="font-size:17px;" :to="{name:'orgnaization-addCourse'}">AddCourse</nuxt-link>
     </div>
     <li class="side-link">
       <a class="d-flex align-items-center text-decoration-none">
@@ -127,12 +127,13 @@ export default {
 .side-link i {
   min-width: 60px;
   text-align: center;
-  font-size: 18px;
   color: white;
+  font-size: 18px;
 }
 
 .side-link a .links_name {
-  font-size: 15px;
-  font-weight: 400;
+  font-weight: 500;
+  font-size: 17px;
+
 }
 </style>

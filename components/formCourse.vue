@@ -529,6 +529,7 @@ export default {
       await this.getCategories();
     }
     await this.getLanguages();
+    this.$emit('emitFinishInit',true);
   },
 };
 </script>

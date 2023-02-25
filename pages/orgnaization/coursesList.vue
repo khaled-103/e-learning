@@ -2,14 +2,14 @@
   <div>
     <div class="row justify-content-between my-4">
       <div class="col-auto mt-2">
-        <nuxt-link to="/orgnaization/dashboard">DASHBOARD</nuxt-link>
-        <span class="text-white">/ COURSES LIST</span>
+        <nuxt-link   to="/orgnaization/dashboard">DASHBOARD</nuxt-link>
+        <span  class="text-white">/ COURSES LIST</span>
       </div>
       <button
         @click="$router.push({ name: 'orgnaization-addCourse' })"
-        class="btn btn-sm btn-outline-light col-auto p-2"
+        class="btn btn-sm btn-light col-auto"
       >
-        Add New Course
+        New Course
       </button>
     </div>
     <div class="">
@@ -79,25 +79,25 @@
         />
         <i
           class="fa fa-search text-white"
-          style="position: absolute; left: 10px; top: 16px; font-size: 18px"
+          style="position: absolute; left: 10px; top: 15px; font-size: 17px"
         ></i>
         <button
           @click="reset()"
-          class="btn btn-danger mt-2"
-          style="width: auto; height: 40px"
+          class="btn btn-danger btn-sm mt-1"
+          style="width: auto; height: 35px"
         >
           Reset <i class="fa fa-refresh"></i>
         </button>
       </div>
       <div class="my-2 row justify-content-center">
         <div class="text-center" v-show="spinnerLoadShow">
-          <h6 class="text-white">
+          <h6 class="text-white" >
             Proccessing... <spinner-load :spinnerLoadShow="spinnerLoadShow" />
           </h6>
         </div>
         <table v-show="!spinnerLoadShow">
           <thead>
-            <tr style="color: white; border-bottom: 1px solid white">
+            <tr style="color: white; border-bottom: 1px solid white;">
               <th>#</th>
               <th>Name</th>
               <th>Status</th>
@@ -111,7 +111,7 @@
               <td>{{ index + 1 }}</td>
               <td>
                 <nuxt-link
-                  class="mt-1"
+                  class="mt-1 courseName"
                   :to="{
                     name: 'orgnaization-courses-id',
                     params: { id: course.id },
@@ -125,10 +125,10 @@
               <td>
                 <i
                   :key="n"
-                  v-for="n in parseInt(course.rating.rate)"
+                  v-for="n in parseInt(course.rating.range_rate)"
                   class="fa fa-star text-warning"
                 ></i>
-                <i v-show="parseInt(course.rating.rate) == 0">--</i>
+                <i v-show="parseInt(course.rating.range_rate) == 0">--</i>
               </td>
             </tr>
             <tr>
@@ -278,10 +278,15 @@ select option {
 }
 
 /* Other styles*/
-
+tr{
+  font-size: 14px;
+}
 a {
   color: #a4a4b2;
   text-decoration: none;
+}
+a.courseName{
+  font-weight: 700;
 }
 
 #myInput {
@@ -289,21 +294,21 @@ a {
   border:1px solid #73719a ;
   border-radius: 15px;
   background-position: 10px 12px;
-  font-size: 16px;
+  font-size: 14px;
   padding: 8px 20px 8px 40px;
   margin-bottom: 12px;
   color: white;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 769px) {
   table {
     padding: 4px;
   }
   table th {
-    font-weight: 600;
+    font-weight: 400;
   }
-  table tr {
-    font-size: 14px;
+  table tr ,a {
+    font-size: 12px !important;
   }
 
 }

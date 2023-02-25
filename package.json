@@ -18,16 +18,22 @@
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/toast": "^3.3.1",
+    "@stripe/stripe-js": "^1.47.0",
     "blueimp-md5": "^2.19.0",
+    "bootstrap": "^5.2.3",
+    "bootstrap-vue": "^2.23.1",
     "cookie-universal-nuxt": "^2.2.2",
     "core-js": "^3.25.3",
     "js-sha256": "^0.9.0",
     "node": "^16.13.1",
     "nuxt": "^2.15.8",
     "nuxt-tailvue": "^1.0.95",
-    "vue": "^2.7.10",
+    "nuxt-video-player": "^1.0.17",
+    "stripe": "^11.11.0",
+    "vue": "^2.7.14",
     "vue-multiselect": "^2.1.7",
     "vue-server-renderer": "^2.7.10",
-    "vue-template-compiler": "^2.7.10"
+    "vue-template-compiler": "^2.7.10",
+    "vue-timeago": "^5.1.3"
   }
 }

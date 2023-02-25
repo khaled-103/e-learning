@@ -36,16 +36,16 @@ export default {
 
 
 
+  * {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
 
 .mainContent {
   background: #1d1d41;
   border-radius: 20px;
-}
-* {
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
 }
 .home-section {
   position: relative;

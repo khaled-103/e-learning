@@ -52,7 +52,7 @@
       <hr />
     </div>
     <div class="section-content mt-4">
-      <div class="text-center" v-show="spinnerLoadShow">
+      <div class="text-center text-white" v-show="spinnerLoadShow">
         <h6>
           Proccessing... <spinner-load :spinnerLoadShow="spinnerLoadShow" />
         </h6>
@@ -137,7 +137,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
 .pointer {
   cursor: pointer;
 }
@@ -157,6 +157,7 @@ hr {
   /* color: #687484; */
   color: white;
   text-align: center;
+
 }
 .section-header:hover {
   border-bottom: 2.5px solid #0258e3;

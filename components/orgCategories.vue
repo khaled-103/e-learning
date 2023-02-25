@@ -43,7 +43,7 @@
     </div>
     <div class="selectedCategories d-flex">
       <span
-        class="catTag badge bg-success text white mx-1 p-2"
+        class="catTag badge text-white mx-1 p-2"
         :key="item.id"
         v-for="item in shownValues"
       >
@@ -166,5 +166,7 @@ i.fa-xmark {
 .catTag {
   flex-basis: auto;
   margin-bottom: 5px;
+  border: 1px solid #a4a4b2;
+  background: #222 !important;
 }
 </style>
