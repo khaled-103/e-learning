@@ -1,228 +1,246 @@
 <template>
-  <div style="padding: 0 40px 30px 32px">
-    <div class="mt-4 header">
-      <h2 class="p-3 pb-5" style="font-size: 25px; font-weight: 600">
-        {{ filteredItems.length }} results for “{{ this.$route.params.search }}”
-      </h2>
-      <div>
-        <span @click="showSideFilters = !showSideFilters"
-          ><i class="fa-solid fa-bars"></i> Filter</span
+  <div style="padding: 0 40px 25px 32px; position: relative">
+    <div class="d-flex mt-2">
+      <div class="background-filtes">
+        <div v-show="showSideFilters">
+          <div class="filters" style="position: relative">
+            <div class="filter mb-4">
+              <hr style="margin-top: 0" />
+              <div
+                @click="toggleNextElement($event)"
+                class="filter-item-header d-flex justify-content-between mb-3"
+              >
+                <span style="z-index: -1">Ratings</span>
+                <i
+                  class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
+                  style="font-size: 13px; :end ; z-index: -1"
+                ></i>
+              </div>
+              <div class="filter-item">
+                <div>
+                  <input
+                    v-model="filters.ratingFilter"
+                    type="radio"
+                    value="4.5"
+                    name="ratingFilter"
+                    id="rating4.5$up"
+                    style="color: black"
+                  />
+                  <label for="rating4.5$up" class="labelRating">
+                    <span class="mx-1">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-regular fa-star-half-stroke"></i>
+                    </span>
+                    <span>4.5&up</span>
+                    <span>({{ recomndDurationFilter["4.5up"] }})</span>
+                  </label>
+                </div>
+                <div>
+                  <input
+                    v-model="filters.ratingFilter"
+                    type="radio"
+                    value="4"
+                    name="ratingFilter"
+                    id="rating4$up"
+                  />
+                  <label for="rating4$up" class="labelRating">
+                    <span class="mx-1">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-regular fa-star"></i>
+                    </span>
+                    <span>4&up</span>
+                    <span>({{ recomndDurationFilter["4up"] }})</span>
+                  </label>
+                </div>
+                <div>
+                  <input
+                    v-model="filters.ratingFilter"
+                    type="radio"
+                    value="3.5"
+                    name="ratingFilter"
+                    id="rating3.5$up"
+                  />
+                  <label for="rating3.5$up" class="labelRating">
+                    <span class="mx-1">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-regular fa-star-half-stroke"></i>
+                      <i class="fa-regular fa-star"></i>
+                    </span>
+                    <span>3.5&up</span>
+                    <span>({{ recomndDurationFilter["3.5up"] }})</span>
+                  </label>
+                </div>
+                <div>
+                  <input
+                    v-model="filters.ratingFilter"
+                    type="radio"
+                    value="3"
+                    name="ratingFilter"
+                    id="rating3$up"
+                  />
+                  <label for="rating3$up" class="labelRating">
+                    <span class="mx-1">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-regular fa-star"></i>
+                      <i class="fa-regular fa-star"></i>
+                    </span>
+                    <span>3&up</span>
+                    <span>({{ recomndDurationFilter["3up"] }})</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="filter1 mb-4">
+              <hr style="margin-top: 0" />
+              <div
+                @click="toggleNextElement($event)"
+                class="filter-item-header d-flex justify-content-between mb-3"
+              >
+                <span style="z-index: -1">Language</span>
+                <i
+                  class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
+                  style="font-size: 13px; :end ; z-index: -1"
+                ></i>
+              </div>
+              <div class="filter-item">
+                <div v-for="lang in recomndLnagFilter" :key="lang[0]">
+                  <input
+                    v-model="filters.languegeFilter"
+                    type="checkbox"
+                    :value="lang[0]"
+                    name="languegeFilter"
+                    :id="lang[0]"
+                  />
+                  <label :for="lang[0]">{{ lang[0] }}</label>
+                  <span>({{ lang[1] }})</span>
+                </div>
+              </div>
+            </div>
+            <div class="filter mb-4">
+              <hr style="margin-top: 0" />
+              <div
+                @click="toggleNextElement($event)"
+                class="filter-item-header d-flex justify-content-between mb-3"
+              >
+                <span style="z-index: -1">Level</span>
+                <i
+                  class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
+                  style="font-size: 13px; :end ; z-index: -1"
+                ></i>
+              </div>
+              <div class="filter-item">
+                <!-- <p  v-for="level in recomndLevelFilter2" :key="level.level">{{ level[1] }}</p> -->
+                <div v-for="level in recomndLevelFilter" :key="level[0]">
+                  <input
+                    v-model="filters.levelFilter"
+                    type="checkbox"
+                    :value="level[0]"
+                    name="levelFilter"
+                    :id="level[0]"
+                  />
+                  <label :for="level[0]">{{ level[0] }}</label>
+                  <span>({{ level[1] }})</span>
+                </div>
+              </div>
+            </div>
+            <div class="filter mb-4">
+              <hr style="margin-top: 0" />
+              <div
+                @click="toggleNextElement($event)"
+                class="filter-item-header d-flex justify-content-between mb-3"
+              >
+                <span style="z-index: -1">Video Duration</span>
+                <i
+                  class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
+                  style="font-size: 13px; :end ; z-index: -1"
+                ></i>
+              </div>
+              <div class="filter-item">
+                <div>
+                  <input
+                    v-model="filters.durationFilter"
+                    type="checkbox"
+                    value="3"
+                    name="languegeFilter"
+                    id="0_3"
+                  />
+                  <label for="0_3">0-3 Hour</label>
+                </div>
+                <div>
+                  <input
+                    v-model="filters.durationFilter"
+                    type="checkbox"
+                    value="6"
+                    name="languegeFilter"
+                    id="3_6"
+                  />
+                  <label for="3_6">3-6 Hour</label>
+                </div>
+                <div>
+                  <input
+                    v-model="filters.durationFilter"
+                    type="checkbox"
+                    value="15"
+                    name="languegeFilter"
+                    id="6_15"
+                  />
+                  <label for="6_15">6-15 Hour</label>
+                </div>
+                <div>
+                  <input
+                    v-model="filters.durationFilter"
+                    type="checkbox"
+                    value="60"
+                    name="languegeFilter"
+                    id="15up"
+                  />
+                  <label for="15up">15+ Hour</label>
+                </div>
+              </div>
+            </div>
+            <i class="fa fa-xmark pointer" @click="toggleSideFilter()"></i>
+          </div>
+        </div>
+      </div>
+      <div
+        :class="[
+          'resultSearch',
+          { mobileResultSearch: mobileSearchResultClass },
+        ]"
+      >
+        <div id="go_top"></div>
+        <div class="my-3 header d-flex justify-content-between">
+          <div class="mt-4">
+            <span @click="toggleSideFilter()">
+              <i class="fa-solid fa-bars"></i> Filter
+            </span>
+            <span class="mx-1" @click="clearFilters()">Clear filters</span>
+          </div>
+          <h2 class="p-1 my-3" style="font-size: 25px; font-weight: 600">
+            {{ filteredItems.length }} results for “{{
+              this.$route.params.search
+            }}”
+          </h2>
+        </div>
+        <div
+          class="pointer"
+          v-for="course in itemsInPage"
+          :key="course.id"
+          @click="goToCourseDetails(course.category_id, course.slug)"
         >
-        <span class="mx-2" @click="clearFilters()">Clear filters</span>
-      </div>
-    </div>
-    <div class="d-flex mt-5" style="">
-      <div v-show="showSideFilters" class="filters">
-        <div class="filter mb-4">
-          <hr style="margin-top: 0" />
-          <div
-            @click="toggleNextElement($event)"
-            class="filter-item-header d-flex justify-content-between mb-3"
-          >
-            <span style="z-index: -1">Ratings</span>
-            <i
-              class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
-              style="font-size: 13px; :end ; z-index: -1"
-            ></i>
-          </div>
-          <div class="filter-item">
-            <div>
-              <input
-                v-model="filters.ratingFilter"
-                type="radio"
-                value="4.5"
-                name="ratingFilter"
-                id="rating4.5$up"
-                style="color: black"
-              />
-              <label for="rating4.5$up" class="labelRating">
-                <span class="mx-1">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-regular fa-star-half-stroke"></i>
-                </span>
-                <span> 4.5&up</span>
-                <span>({{ recomndDurationFilter["4.5up"] }})</span>
-              </label>
-            </div>
-            <div>
-              <input
-                v-model="filters.ratingFilter"
-                type="radio"
-                value="4"
-                name="ratingFilter"
-                id="rating4$up"
-              />
-              <label for="rating4$up" class="labelRating">
-                <span class="mx-1">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-regular fa-star"></i>
-                </span>
-                <span>4&up</span>
-                <span>({{ recomndDurationFilter["4up"] }})</span>
-              </label>
-            </div>
-            <div>
-              <input
-                v-model="filters.ratingFilter"
-                type="radio"
-                value="3.5"
-                name="ratingFilter"
-                id="rating3.5$up"
-              />
-              <label for="rating3.5$up" class="labelRating">
-                <span class="mx-1">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-regular fa-star-half-stroke"></i>
-                  <i class="fa-regular fa-star"></i>
-                </span>
-                <span>3.5&up</span>
-                <span>({{ recomndDurationFilter["3.5up"] }})</span>
-              </label>
-            </div>
-            <div>
-              <input
-                v-model="filters.ratingFilter"
-                type="radio"
-                value="3"
-                name="ratingFilter"
-                id="rating3$up"
-              />
-              <label for="rating3$up" class="labelRating">
-                <span class="mx-1">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-regular fa-star"></i>
-                  <i class="fa-regular fa-star"></i>
-                </span>
-                <span>3&up</span>
-                <span>({{ recomndDurationFilter["3up"] }})</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="filter1 mb-4">
-          <hr style="margin-top: 0" />
-          <div
-            @click="toggleNextElement($event)"
-            class="filter-item-header d-flex justify-content-between mb-3"
-          >
-            <span style="z-index: -1">Language</span>
-            <i
-              class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
-              style="font-size: 13px; :end ; z-index: -1"
-            ></i>
-          </div>
-          <div class="filter-item">
-            <div v-for="lang in recomndLnagFilter" :key="lang[0]">
-              <input
-                v-model="filters.languegeFilter"
-                type="checkbox"
-                :value="lang[0]"
-                name="languegeFilter"
-                :id="lang[0]"
-              />
-              <label :for="lang[0]">{{ lang[0] }}</label>
-              <span>({{ lang[1] }})</span>
-            </div>
-          </div>
-        </div>
-        <div class="filter mb-4">
-          <hr style="margin-top: 0" />
-          <div
-            @click="toggleNextElement($event)"
-            class="filter-item-header d-flex justify-content-between mb-3"
-          >
-            <span style="z-index: -1">Level</span>
-            <i
-              class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
-              style="font-size: 13px; :end ; z-index: -1"
-            ></i>
-          </div>
-          <div class="filter-item">
-            <!-- <p  v-for="level in recomndLevelFilter2" :key="level.level">{{ level[1] }}</p> -->
-            <div v-for="level in recomndLevelFilter" :key="level[0]">
-              <input
-                v-model="filters.levelFilter"
-                type="checkbox"
-                :value="level[0]"
-                name="levelFilter"
-                :id="level[0]"
-              />
-              <label :for="level[0]">{{ level[0] }}</label>
-              <span>({{ level[1] }})</span>
-            </div>
-          </div>
-        </div>
-        <div class="filter mb-4">
-          <hr style="margin-top: 0" />
-          <div
-            @click="toggleNextElement($event)"
-            class="filter-item-header d-flex justify-content-between mb-3"
-          >
-            <span style="z-index: -1">Video Duration</span>
-            <i
-              class="fa-solid fa-chevron-down mx-3 d-flex align-self-center"
-              style="font-size: 13px; :end ; z-index: -1"
-            ></i>
-          </div>
-          <div class="filter-item">
-            <div>
-              <input
-                v-model="filters.durationFilter"
-                type="checkbox"
-                value="3"
-                name="languegeFilter"
-                id="0_3"
-              />
-              <label for="0_3">0-3 Hour</label>
-            </div>
-            <div>
-              <input
-                v-model="filters.durationFilter"
-                type="checkbox"
-                value="6"
-                name="languegeFilter"
-                id="3_6"
-              />
-              <label for="3_6">3-6 Hour</label>
-            </div>
-            <div>
-              <input
-                v-model="filters.durationFilter"
-                type="checkbox"
-                value="15"
-                name="languegeFilter"
-                id="6_15"
-              />
-              <label for="6_15">6-15 Hour</label>
-            </div>
-            <div>
-              <input
-                v-model="filters.durationFilter"
-                type="checkbox"
-                value="60"
-                name="languegeFilter"
-                id="15up"
-              />
-              <label for="15up">15+ Hour</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="resultSearch">
-        <div class="pointer" v-for="course in itemsInPage" :key="course.id" @click="goToCourseDetails(course.category_id,course.slug)">
           <div class="result-course d-flex">
             <div class="imageHolder">
-              <img :src="course.image" alt="" />
+              <img :src="course.image" alt />
             </div>
             <div class="course-info mx-3">
               <h3 class="course-name">{{ course.name }}</h3>
@@ -238,7 +256,9 @@
               </p>
             </div>
             <div class="price">
-              <p class="course-price" v-if="course.price > 0">${{ course.price }}</p>
+              <p class="course-price" v-if="course.price > 0">
+                ${{ course.price }}
+              </p>
               <p class="course-price" v-else>Free</p>
             </div>
           </div>
@@ -278,6 +298,7 @@ export default {
   },
   data() {
     return {
+      mobileSearchResultClass: false,
       filters: {
         ratingFilter: 0,
         durationFilter: [],
@@ -313,12 +334,21 @@ export default {
         nextElement.style.display = "block";
       }
     },
-    goToCourseDetails(catId,slug) {
+    toggleSideFilter() {
+      let resultSearchDom = document.querySelector(".resultSearch");
+      this.showSideFilters = !this.showSideFilters;
+      if (this.showSideFilters) {
+        resultSearchDom.style.marginLeft = "270px";
+      } else {
+        resultSearchDom.style.marginLeft = "0";
+      }
+      this.checkWindowWidth();
+    },
+    goToCourseDetails(catId, slug) {
       let interest = this.$cookies.get("cookieInterest");
       if (!interest) interest = [];
 
-      if (interest.indexOf(catId) == -1)
-        interest.push(catId);
+      if (interest.indexOf(catId) == -1) interest.push(catId);
 
       this.$cookies.set("cookieInterest", interest, {
         path: "/",
@@ -334,6 +364,19 @@ export default {
       this.filters.durationFilter = [];
       this.filters.levelFilter = [];
       this.filters.languegeFilter = [];
+    },
+    checkWindowWidth() {
+      this.mobileSearchResultClass = false;
+      if (window.innerWidth < 846) {
+        if (this.showSideFilters) {
+          this.mobileSearchResultClass = true;
+        }
+      }
+    },
+    listenWindowWidth() {
+      window.addEventListener("resize", () => {
+        this.checkWindowWidth();
+      });
     },
   },
   computed: {
@@ -355,10 +398,11 @@ export default {
       });
     },
     itemsInPage() {
-      console.log("items");
       let indexStart = (this.currentPage - 1) * this.perPage;
       let indexEnd = this.currentPage * this.perPage;
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
+      // const el = document.getElementById('go_top');
+      // el.scrollIntoView({behavior: "smooth"});
       return this.filteredItems.slice(indexStart, indexEnd);
     },
     rows() {
@@ -366,6 +410,8 @@ export default {
     },
   },
   async mounted() {
+    this.checkWindowWidth();
+    this.listenWindowWidth();
     let result = await this.sendRequest({
       url: "/search",
       dataSend: {
@@ -408,7 +454,19 @@ export default {
 </script>
 
 <style scoped>
-.pointer{
+.fa-xmark {
+  position: absolute;
+  top: 12px;
+  right: -55px;
+  font-size: 18px;
+  color: #1d1e1f;
+  background: white;
+  color: #1d1e1f;
+  border-radius: 50%;
+  padding: 12px 15px;
+  display: none;
+}
+.pointer {
   cursor: pointer;
 }
 .imageHolder {
@@ -455,13 +513,24 @@ export default {
   margin-left: 35px;
   cursor: pointer;
 }
-
+.background-filtes {
+  position: absolute !important;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  /* height: 100vm; */
+  background: none;
+}
 .filters {
-  width: 300px;
-  padding: 0px 50px 20px 0px;
+  /* position: absolute !important;
+  top: 195px;
+  left: 0;*/
+  width: 270px;
+  padding: 0px 17px 20px 22px;
   position: relative;
   z-index: 2;
   animation: filter 0.3s ease-in-out;
+  background: white;
 }
 
 .filter-item span {
@@ -470,6 +539,13 @@ export default {
 
 .resultSearch {
   flex-grow: 2;
+  margin-left: 270px;
+  position: relative;
+}
+
+.mobileResultSearch {
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .filter-item-header {
@@ -506,13 +582,51 @@ export default {
   margin-bottom: 10px;
 }
 
-@keyframes filter {
-  0% {
-    width: 0;
+@media screen and (max-width: 846px) {
+  .resultSearch {
+    margin-left: 0 !important;
+  }
+  .background-filtes {
+    top: -7px;
+    background: rgb(0, 0, 0, 0.5);
+
+    z-index: 100;
+  }
+  .filters {
+    padding-top: 10px;
+    background: white;
+    min-height: 100vh;
+    opacity: 1;
+  }
+  .fa-xmark {
+    display: block;
+  }
+}
+
+@media (max-width: 576px) {
+  .imageHolder {
+    height: 80px;
+    min-width: 110px;
+    max-width: 110px;
   }
 
+  .header span {
+    margin-left: 0;
+  }
+
+  .header h2 {
+    font-size: 19px !important;
+  }
+}
+
+@keyframes filter {
+  0% {
+    opacity: 0;
+    /* transform:scale(0); */
+  }
   100% {
-    width: 300px;
+    opacity: 1;
+    /* transform:scale(1); */
   }
 }
 </style>

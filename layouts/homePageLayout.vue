@@ -63,7 +63,7 @@ export default {
   async created() {
     if (this.$store.state.auth.token == null)
       this.$store.dispatch("auth/initToken");
-
+      
     let result = await this.sendRequest({
       url: "/search/get-course-names",
       dataSend: null

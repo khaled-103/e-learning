@@ -11,7 +11,7 @@
     <div class="spinners" v-if="!sections">
       <span class="loader"></span>
     </div>
-    <div  class=""  style="overflow-x: hidden !important">
+    <div v-else style="overflow-x: hidden !important">
       <div class="content row">
         <div v-show="courseName" class="col-lg-9  col-12" style="padding-right: 0">
             <div class="">
@@ -28,9 +28,9 @@
             </div>
           <course-learn-navigation @emitSectionShow="(value)=>{navNumberShown = value}"/>
           <div class="mt-4 mb-5" style="width:95%;margin:auto;">
-            <course-learn-sections :courseId="courseId"
+            <course-learn-sections  :courseId="courseId"
               v-show="navNumberShown == 0"
-              v-if="sections"
+              v-if="courseId"
               :sections="sections"
               :markLectureEvent="markLectureEvent"
               :currentLectureId="currentLectureId"
@@ -57,8 +57,8 @@
         >
           <div class="sections-side-bar">
 
-            <course-learn-sections :courseId="courseId"
-            v-if="sections"
+            <course-learn-sections  :courseId="courseId"
+            v-if="courseId"
             :sections="sections"
               :markLectureEvent="markLectureEvent"
               :currentLectureId="currentLectureId"
@@ -140,6 +140,7 @@ export default {
   box-shadow: 1px 1px 6px #888a88;
   padding-bottom: 100px;
   background: white;
+  width: inherit;
 }
 .content {
   margin-top: 44px;

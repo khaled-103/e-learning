@@ -76,7 +76,7 @@ export default {
     currentSectionId: null,
     sections: null,
     isCurrrentLectureMark: false,
-    courseId:Number
+    courseId: Number,
   },
   watch: {
     markLectureEvent(value) {
@@ -154,19 +154,18 @@ export default {
         maxAge: 60 * 60 * 24 * 7 * 30 * 12,
       });
       learnTrack = this.$cookies.get("learnTrack");
-      console.log(learnTrack);
     },
   },
   async mounted() {
-    // console.log("mounted");
-    // await this.getCourseContent();
+
     let learnTrack = this.$cookies.get("learnTrack");
-    console.log(learnTrack);
     if (learnTrack) {
       let listWatching = learnTrack[this.courseId];
-      for (let item of listWatching) {
-        const span = this.$refs["watch" + item];
-        span[0].classList.add("fa-check");
+      if (listWatching != null) {
+        for (let item of listWatching) {
+          const span = this.$refs["watch" + item];
+          span[0].classList.add("fa-check");
+        }
       }
     }
   },
@@ -174,7 +173,6 @@ export default {
 </script>
 
 <style scoped>
-
 .check {
   text-align: center;
   width: 15px;
@@ -215,7 +213,7 @@ i.fa-chevron-down,
 i.fa-chevron-up {
   position: absolute;
   top: 15px;
-  right: 8px;
+  right: 10px;
   font-size: 12px;
 }
 .lectures {

@@ -40,6 +40,7 @@ export default {
       scrollValue: 0,
       scrollWidth: 10,
       clientWidth: 20,
+      timeInterval: null,
     };
   },
   methods: {
@@ -50,7 +51,6 @@ export default {
       this.$refs.slider.scrollBy({
         left: dir * this.$refs.slider.clientWidth,
         behavior: "smooth",
-        speed: 90,
       });
 
       setTimeout(() => {
@@ -67,11 +67,14 @@ export default {
     },
   },
   mounted() {
-    setTimeout(() => {
-      this.scrollValue = this.$refs.slider.scrollLeft;
-      this.scrollWidth = this.$refs.slider.scrollWidth;
+    this.timeInterval = setInterval(() => {
       this.clientWidth = this.$refs.slider.clientWidth;
-    }, 1000);
+      if (this.clientWidth > 0) {
+        this.scrollValue = this.$refs.slider.scrollLeft;
+        this.scrollWidth = this.$refs.slider.scrollWidth;
+        clearInterval(this.timeInterval);
+      }
+    }, 500);
   },
 };
 </script>

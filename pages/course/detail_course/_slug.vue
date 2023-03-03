@@ -296,9 +296,19 @@
           <h3 class="mt-3" v-if="price > 0">${{ price }}</h3>
           <h3 class="mt-3" v-else>Free</h3>
           <div class="actions">
-            <button class="buy" v-if="status == 'not_pay'">Buy now</button>
-            <button class="buy" v-if="status == 'free'">Enroll now</button>
-            <button class="buy" v-if="status == 'register'">
+            <button
+              class="buy"
+              v-if="status == 'not_pay'"
+              @click="goToPayments()"
+            >
+              Buy now
+            </button>
+            <button class="buy" v-if="status == 'free'" @click="enrollFree()">Enroll now</button>
+            <button
+              class="buy"
+              v-if="status == 'register'"
+              @click="goToCourseLearn()"
+            >
               Go to course
             </button>
 
@@ -336,7 +346,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import Ratings from "~/components/ratings.vue";
 export default {
   layout: "homePageLayout",
@@ -363,6 +373,7 @@ export default {
       requirements: null,
       objectives: null,
       id: null,
+      discount: null,
       // Ratings: [],
       sections: [
         {
@@ -379,9 +390,13 @@ export default {
   methods: {
     ...mapGetters({
       getToken: "auth/getToken",
+      getOrderTotalPrice: "payment/getTotalPrice",
     }),
     ...mapActions({
       sendRequest: "auth/sendRequest",
+    }),
+    ...mapMutations({
+      setOrderItems: "payment/setOrderItems",
     }),
     changeActive(value) {
       this.active = value;
@@ -449,6 +464,7 @@ export default {
         this.description = details.course.description;
         this.teacher = details.course.teacher;
         this.id = details.course.id;
+        this.discount = details.course.discount;
         this.avargRating = parseFloat(
           details.course.rating.range_rate.toFixed(1)
         );
@@ -498,10 +514,50 @@ export default {
             calculateStatus = "not_pay";
           }
         }
-      }else if (this.price > 0) {
-            calculateStatus = "not_pay";
+      } else if (this.price > 0) {
+        calculateStatus = "not_pay";
       }
       this.status = calculateStatus;
+    },
+    goToPayments() {
+      this.setOrderItems([
+        {
+          id: this.id,
+          price: this.price,
+          name: this.title,
+          image: this.image,
+          discount: this.discount,
+        },
+      ]);
+      this.$router.push({
+        name: "payments-course-courseId",
+        params: {
+          courseId: this.$route.params.slug,
+        },
+      });
+    },
+    goToCourseLearn() {
+      this.$router.push({
+        name: "course-learn-slug",
+        params: {
+          slug: this.$route.params.slug,
+        },
+      });
+    },
+    async enrollFree() {
+      let result = await this.sendRequest({
+        url: "/enrollCourseFree",
+        dataSend: {
+          user_id: this.getToken().tokenable_id,
+          course_id: this.id,
+        },
+      });
+      if (result.data.status) {
+        this.$router.push({
+          name: "course-learn-slug",
+          params: { slug: this.$route.params.slug },
+        });
+      }
     },
   },
   async mounted() {
