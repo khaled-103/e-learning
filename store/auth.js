@@ -33,6 +33,7 @@ export const actions = {
       headers: {
         "x-laravel-version": "v9"
       },
+      // withCredentials:true
     });
     return result;
   },

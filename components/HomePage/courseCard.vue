@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import stars from "@/components/HomePage/stars.vue";
+import stars from "~/components/HomePage/stars1.vue";
 export default {
   props: {
     course: Object,
@@ -75,6 +75,7 @@ a {
   height: 100%;
   width: 100%;
   border-radius: 15px 15px 0 0;
+  object-fit: cover;
 }
 
 .course-info {

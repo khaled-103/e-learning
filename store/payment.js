@@ -33,14 +33,6 @@ export const mutations = {
       state.basicPrice += element.price;
       state.discount += element.discount;
     });
-    // this.$cookies.set("orderInfo", {
-    //   orderItems:state.orderItems,
-    //   amount:state.amount,
-    //   basicPrice: state.basicPrice,
-    //   discount : state.discount
-    // }, {
-    //   path: "/",
-    // });
   },
 };
 

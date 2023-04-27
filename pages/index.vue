@@ -1,10 +1,8 @@
 <template>
   <div>
-    <div class="spinners" v-show="!resultReady">
-      <span class="loader"></span>
-    </div>
-    <div v-show="resultReady">
-      <div class="intro-image mt-1">
+    <page-loading-spinner v-if="!resultReady" />
+    <div v-else>
+      <div class="intro-image">
         <img
           src="https://www.muvi.com/wp-content/uploads/2019/04/5-building-blocks-without-which-you-cannot-develop-an-eLearning-Platform.jpg"
           alt="home-page-image"
@@ -39,7 +37,6 @@
 import { mapActions } from "vuex";
 import slider from "@/components/HomePage/slider.vue";
 import topCategories from "@/components/HomePage/topCategories.vue";
-
 
 export default {
   layout: "homePageLayout",
@@ -83,6 +80,7 @@ export default {
     },
   },
   mounted() {
+    console.log('mounted');
     this.initHomePage();
   },
 };

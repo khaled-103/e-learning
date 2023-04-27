@@ -1,7 +1,7 @@
 <template>
-  <div class="sideBar">
+  <div class="sideBar mb-5">
     <div class="sideBarContent">
-      <div class="not-login-status d-none">
+      <div class="not-login-status ">
         <div class="pointer">
           <nuxt-link :to="{ name: 'user-login' }">Log in</nuxt-link>
         </div>
@@ -9,7 +9,7 @@
           <nuxt-link :to="{ name: 'user-register' }">Sign up</nuxt-link>
         </div>
       </div>
-      <div class="login-status">
+      <div class="login-status d-none">
         <div class="pointer my-2">
           <nuxt-link :to="{ name: 'user-login' }">My Learning</nuxt-link>
         </div>
@@ -19,6 +19,11 @@
         <div class="pointer mb-2">
           <nuxt-link :to="{ name: 'user-login' }">Messages</nuxt-link>
         </div>
+      </div>
+      <hr />
+      <the-categories location="side" />
+      <hr />
+      <div class="login-status d-none">
         <div class="pointer my-2">
           <nuxt-link :to="{ name: 'user-login' }">Logout</nuxt-link>
         </div>
@@ -29,9 +34,12 @@
 </template>
 
 <script>
+import TheCategories from "../categories/TheCategories.vue";
 export default {
+  components: {
+    TheCategories,
+  },
   emits: ["hide-side-bar"],
-  
 };
 </script>
 
@@ -43,14 +51,16 @@ export default {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+
 }
 
 .sideBarContent {
   background: white;
   width: 250px;
   padding: 15px 10px;
-  height: 100vh;
+  min-height: 100vh;
+  /* overflow-y: auto; */
   position: relative;
   animation: sideBar 0.4s ease-in-out;
 }
@@ -91,6 +101,5 @@ a {
   100% {
     width: 250px;
   }
-
 }
 </style>

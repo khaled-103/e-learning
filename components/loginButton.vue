@@ -7,7 +7,7 @@
     >
       Login
     </button>
-    <spinner-load :spinnerLoadShow="spinnerLoadShow"/>
+    <spinner-load :spinnerLoadShow="spinnerLoadShow" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import { mapMutations, mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      spinnerLoadShow:false
+      spinnerLoadShow: false,
     };
   },
   props: {
@@ -54,8 +54,7 @@ export default {
           path: "/",
           maxAge: 60 * 60,
         });
-        if (window.history.state.idx > 0) return this.$router.back();
-        else return this.$router.push({ name: this.routeName });
+        return this.$router.push(this.$route.query.redirect || 'index');
       } else if (result.data.errors != null) {
         this.$emit("showGeneralError", false);
         let errors = result.data.errors;

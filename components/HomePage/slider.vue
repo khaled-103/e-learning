@@ -68,7 +68,9 @@ export default {
   },
   mounted() {
     this.timeInterval = setInterval(() => {
-      this.clientWidth = this.$refs.slider.clientWidth;
+      this.clientWidth = 0;
+      if(this.$refs.slider)
+        this.clientWidth = this.$refs.slider.clientWidth;
       if (this.clientWidth > 0) {
         this.scrollValue = this.$refs.slider.scrollLeft;
         this.scrollWidth = this.$refs.slider.scrollWidth;

@@ -1,14 +1,17 @@
 <template>
   <div>
-    <navbarHome v-if="coursesInfoForHint" :coursesInfoForHint="coursesInfoForHint" @show-side-bar="sideBarShow = true"
+    <navbarHome v-if="coursesInfoForHint" :coursesInfoForHint="coursesInfoForHint" @show-side-bar="showSideBar()"
       @show-search-bar="searchBarShow = true" />
     <div v-show="sideBarShow" class="d-lg-none">
-      <side-bar-home @hide-side-bar="sideBarShow = false" />
+      <side-bar-home @hide-side-bar="hideSideBar()" />
     </div>
     <div v-show="searchBarShow" class="d-sm-none">
       <search-bar v-if="coursesInfoForHint" :coursesInfoForHint="coursesInfoForHint" @hide-search-bar="searchBarShow = false" />
     </div>
-    <Nuxt />
+    <div ref="content">
+      <Nuxt />
+    </div>
+
   </div>
 </template>
 
@@ -16,7 +19,7 @@
 import navbarHome from "@/components/HomePage/navbar.vue";
 import sideBarHome from '@/components/HomePage/sideBar.vue';
 import searchBar from '@/components/HomePage/searchBar.vue';
-import {mapActions} from 'vuex';
+import {mapActions,mapGetters} from 'vuex';
 export default {
   head: {
     link: [
@@ -56,19 +59,31 @@ export default {
     }
   },
   methods: {
+    ...mapGetters({
+      getToken:'auth/getToken'
+    }),
     ...mapActions({
       sendRequest: "auth/sendRequest"
     }),
+    showSideBar(){
+      console.log(this.$refs.content.style.maxHeight);
+      this.$refs.content.style.maxHeight = "90vh";
+      this.$refs.content.style.overflow = "hidden";
+      this.sideBarShow = true;
+    },
+    hideSideBar(){
+      this.$refs.content.style.maxHeight = "100%";
+      this.sideBarShow = false;
+    }
   },
   async created() {
     if (this.$store.state.auth.token == null)
       this.$store.dispatch("auth/initToken");
-      
+
     let result = await this.sendRequest({
       url: "/search/get-course-names",
       dataSend: null
     });
-    console.log(result.data);
     this.coursesInfoForHint = result.data;
   },
 };
@@ -82,6 +97,7 @@ export default {
 * {
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
   margin: 0;
   padding: 0;
 }

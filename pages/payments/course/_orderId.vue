@@ -1,29 +1,84 @@
 <template>
-  <div style="width: 100vw">
-    <div>
-      <div
-        id="payment-message"
-        style="display: none"
-        class="alert alert-danger"
-      ></div>
-      <form action="" method="post" id="payment-form">
-        <div id="payment-element"></div>
-        <button type="submit" id="submit" form="payment-form">
-          <span id="button-text">Pay now</span>
-          <span id="spinner" style="display: none">Proccessing...</span>
-        </button>
-      </form>
+  <div>
+    <page-loading-spinner v-if="!resultReady" />
+    <div v-show="resultReady" style="width: 100%" class="holder">
+      <div class="container">
+        <div class="row py-5">
+          <div class="col-md-7 col-12">
+            <div
+              id="payment-message"
+              style="display: none"
+              class="alert alert-danger"
+            ></div>
+            <div class="">
+              <form
+                action=""
+                class="bg-white"
+                style="width: 100%"
+                method="post"
+                id="payment-form"
+              >
+                <div id="payment-element"></div>
+              </form>
+              <div class="order_details">
+                <h5 class="mb-3">Order details</h5>
+                <div class="mb-3" :key="item.id" v-for="item in orderItems">
+                  <div class="d-flex justify-content-between">
+                    <div class="d-flex col-10">
+                      <img
+                        :src="item.image"
+                        alt=""
+                        width="30px"
+                        height="30px"
+                      />
+                      <h6 class="mx-2">{{ item.name }}</h6>
+                    </div>
+                    <span>${{ item.price }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="summary col-md-5 col-12 bg-white">
+            <div class="p-5">
+              <h5 class="mb-3">Summary</h5>
+              <div class="d-flex justify-content-between">
+                <span>Basic Price:</span>
+                <span>${{ basicPrice }}</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between">
+                <span>Discount:</span>
+                <span>${{ discount }}</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between">
+                <span>Total:</span>
+                <span>${{ orderTotalPrice }}</span>
+              </div>
+              <button
+                type="submit"
+                class="mt-5"
+                id="submit"
+                form="payment-form"
+              >
+                <span id="button-text">Complete Payment</span>
+                <span id="spinner" style="display: none">Proccessing...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div></div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 let elements, stripe;
 export default {
   layout: "homePageLayout",
+  middleware: ["AuthUser"],
   head: {
     script: [
       {
@@ -34,6 +89,12 @@ export default {
   data() {
     return {
       stripeResponse: null,
+      orderId: null,
+      basicPrice: null,
+      discount: null,
+      orderItems: [],
+      orderTotalPrice: null,
+      resultReady: false,
     };
   },
 
@@ -41,25 +102,29 @@ export default {
     ...mapActions({
       sendRequest: "auth/sendRequest",
     }),
+    ...mapMutations({
+      setOrderItems: "payment/setOrderItems",
+    }),
     ...mapGetters({
       getToken: "auth/getToken",
-      getOrderTotalPrice: "payment/getTotalPrice",
-      getOrderItems: "payment/getOrderItems",
-      getBasicPrice: "payment/getBasicPrice",
-      getDiscount: "payment/getDiscount",
     }),
     async initialize() {
+      this.resultReady = false;
+      await this.initOrderInfo();
       const response = await fetch(
         "http://127.0.0.1:8000/api/payment/createPaymentIntent",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            amount: this.getOrderTotalPrice(),
+            amount: this.orderTotalPrice,
+            orderId: this.$route.params.orderId,
+            userId: this.getToken().tokenable_id,
           }),
         }
       );
-      const { clientSecret } = await response.json();
+      const res = await response.json();
+      const { clientSecret } = await res;
       const appearance = {
         theme: "stripe",
       };
@@ -68,32 +133,46 @@ export default {
       const paymentElementOptions = {
         layout: "tabs",
       };
-
       const paymentElement = elements.create("payment", paymentElementOptions);
       paymentElement.mount("#payment-element");
+      this.resultReady = true;
+    },
+    async initOrderInfo() {
+      let result = await this.sendRequest({
+        url: "/getInitOrderInfo",
+        dataSend: {
+          orderId: this.$route.params.orderId,
+          userId: this.getToken().tokenable_id,
+        },
+      });
+      if (result.data.status) {
+        const order = result.data.order;
+        this.basicPrice = order.basicPrice;
+        this.orderTotalPrice = order.totalPrice;
+        this.orderItems = JSON.parse(order.summary);
+        this.discount = order.discount;
+      } else {
+        this.$toast.show({
+          type: "danger",
+          title: "failed",
+          message: "Warning!! can't access to this order",
+        });
+        this.$router.push({
+          name: "index",
+        });
+      }
     },
 
     async handleSubmit(e) {
       e.preventDefault();
       this.setLoading(true);
-
-      const obj = encodeURI(
-        JSON.stringify({
-          orderItems: this.getOrderItems(),
-          amount: this.getOrderTotalPrice(),
-          basicPrice: this.getBasicPrice(),
-          discount: this.getDiscount(),
-        })
-      );
       this.stripeResponse = await stripe.confirmPayment({
         elements,
         confirmParams: {
           // Make sure to change this to your payment completion page
           return_url:
             "http://localhost:3000/payments/confirm/" +
-            this.$route.params.courseId +
-            "?orderInfo=" +
-            obj,
+            this.$route.params.orderId,
         },
       });
 
@@ -169,8 +248,7 @@ export default {
   },
   mounted() {
     let interval = setInterval(() => {
-      console.log("interval");
-      if (Stripe) {
+      if (this.getToken()) {
         stripe = new Stripe(
           "pk_test_51Meg81Loe7VzYnJpefrOlBo3mSkbspAoN4A1dyaMbUJi102yGKjRiDoTQTeBD2FxJDMtAdMPbAc9q3IpjoD0X8RO00jcUe8XOp"
         );
@@ -182,6 +260,17 @@ export default {
       }
     }, 500);
   },
+  beforeRouteLeave(to, from, next) {
+    if (to.name != "payments-confirm-orderId") {
+      this.sendRequest({
+        url: "/cancleOrder",
+        dataSend: {
+          orderId: this.$route.params.orderId,
+        },
+      });
+    }
+    next();
+  },
 };
 </script>
 <style scoped>
@@ -189,10 +278,33 @@ export default {
 * {
   box-sizing: border-box;
 }
+img {
+  max-width: 40px;
+  max-height: 40px;
+  object-fit: cover;
+}
+.row {
+  overflow-x: hidden;
+}
+.holder {
+  background: #f1edf3;
+  width: 100vw;
+  min-height: 100vh;
+}
+.summary {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+@media (max-width: 800px) {
+  .summary {
+    width: 95%;
+    margin: 20px auto;
+  }
+}
 
 form {
-  width: 30vw;
-  min-width: 500px;
+  /* width: 30vw; */
+  /* min-width: 500px; */
   align-self: center;
   box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
     0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
@@ -294,44 +406,12 @@ button:disabled {
   -webkit-animation: loading 2s infinite ease;
   animation: loading 2s infinite ease;
 }
-input.wpforms-field-stripe-credit-card-cardname::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  color: #b95d52;
-  border: 1px solid black;
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 100;
-  background-color: #f6f6f6;
-}
-
-input.wpforms-field-stripe-credit-card-cardname::-moz-placeholder {
-  /* Firefox 19+ */
-  color: #b95d52;
-  border: 1px solid black;
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 100;
-  background-color: #f6f6f6;
-}
-
-input.wpforms-field-stripe-credit-card-cardname:-ms-input-placeholder {
-  /* IE 10+ */
-  color: #b95d52;
-  border: 1px solid black;
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 100;
-  background-color: #f6f6f6;
-}
-
-input.wpforms-field-stripe-credit-card-cardname:-moz-placeholder {
-  /* Firefox 18- */
-  color: #b95d52;
-  border: 1px solid black;
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 100;
-  background-color: #f6f6f6;
+.order_details {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 20px 0;
 }
 
 @-webkit-keyframes loading {

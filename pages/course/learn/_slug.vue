@@ -7,10 +7,8 @@
       </h4>
       <h6 class="col-md-9 col-12">The Complete Flutter Development Guide [2022 Edition]</h6>
     </header>
+    <page-loading-spinner v-if="!sections"/>
 
-    <div class="spinners" v-if="!sections">
-      <span class="loader"></span>
-    </div>
     <div v-else style="overflow-x: hidden !important">
       <div class="content row">
         <div v-show="courseName" class="col-lg-9  col-12" style="padding-right: 0">
@@ -175,45 +173,5 @@ header h4 {
   border-right: 1px solid white;
   font-size: 19px;
   margin-top: 2px;
-}
-
-.spinners {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.loader {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #1c1d1f;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-.loader::after {
-  content: "";
-  box-sizing: border-box;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 3px solid;
-  border-color: orange transparent;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>
